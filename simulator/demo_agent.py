@@ -55,21 +55,21 @@ TEST_SCENARIOS = [
 
     # ── AMBER scenarios (score 31–60) ─────────────────────────────────────
     (
-        "AMBER — Unknown tool with external URL",
+        "AMBER — External request with token (score: 55)",
         "send_http_request",
-        {"url": "https://external-api.example.com/data", "method": "GET"},
+        {"url": "https://external-api.example.com/data", "auth_token": "bearer-xyz-123"},
         "agent-amber-01",
     ),
     (
-        "AMBER — File operation with user home path",
+        "AMBER — File write from external URL to home dir (score: 45)",
         "write_file",
-        {"path": "/home/user/output.txt", "content": "analysis complete"},
+        {"path": "/home/user/output.txt", "download_from": "https://external-service.org/data"},
         "agent-amber-02",
     ),
     (
-        "AMBER — Unknown tool accessing credentials param",
+        "AMBER — Unknown tool reading API key parameter (score: 35)",
         "get_config",
-        {"config_key": "api_key", "service": "weather"},
+        {"api_key": "service_key_read", "service": "payment_gateway"},
         "agent-amber-03",
     ),
 
@@ -217,4 +217,5 @@ def run_simulator(delay: float = 0.8) -> None:
 
 
 if __name__ == "__main__":
-    run_simulator()
+    delay = 0.05 if "--fast" in sys.argv else 0.3
+    run_simulator(delay=delay)
